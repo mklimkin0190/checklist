@@ -1,33 +1,38 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
-interface ICheckboxProps {
-  isChecked: boolean
-  children: ReactNode
-  onClick(): void
-}
+import { Colors } from '../constants';
 
 const StyledCheckbox = styled.div<{ isChecked: boolean }>`
-  width: 12px;
-  height: 12px;
-  border: 1px solid gray;
+  position: relative;
+  width: 15px;
+  height: 15px;
   border-radius: 2px;
-  display: inline-block;
-  vertical-align: top;
-  ${({ isChecked }) => (isChecked && 'background-color: gray;')}
+  margin-right: 12px;
+  border: 1px solid ${Colors.dark};
+  ${({ isChecked }) => {
+    if (isChecked) {
+      return `
+        background-color: ${Colors.dark};
+        &:after {
+          position: absolute;
+          top: -3px;
+          left: 1px;
+          content: '\\2713';
+          color: white;
+          font-weight: 600;
+        }
+      `
+    }
+    return `background-color: ${Colors.white};`
+  }}
 `
 
-const Inline = styled.div`
-  display: inline-block;
-`
-
-const Checkbox: React.FC<ICheckboxProps> = ({ isChecked, children, onClick }: ICheckboxProps) => {
-  return (
-    <div style={{ lineHeight: '25px' }} onClick={onClick}>
-      <StyledCheckbox isChecked={isChecked} />
-      <Inline>{children}</Inline>
-    </div>
-  )
+interface ICheckboxProps {
+  isChecked: boolean
 }
+
+const Checkbox: React.FC<ICheckboxProps> = ({ isChecked }: ICheckboxProps) =>
+  <StyledCheckbox isChecked={isChecked} />
 
 export default Checkbox

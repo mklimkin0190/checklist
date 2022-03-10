@@ -14,10 +14,8 @@ const renderer = (data: Object) => {
   </div>
 }
 
-const App: React.FC = () => {
-  return (
-    <List data={data} renderer={renderer} />
-  );
-}
+const App: React.FC = () => (
+  <List data={data} renderer={renderer} />
+);
 
 export default App;
