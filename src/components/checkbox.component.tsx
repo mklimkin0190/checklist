@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react';
-import styled from 'styled-components';
+import React, { memo } from 'react'
+import styled from 'styled-components'
 
-import { Colors } from '../constants';
+import { Colors } from '../constants'
 
 const StyledCheckbox = styled.div<{ isChecked: boolean }>`
   position: relative;
@@ -35,4 +35,4 @@ interface ICheckboxProps {
 const Checkbox: React.FC<ICheckboxProps> = ({ isChecked }: ICheckboxProps) =>
   <StyledCheckbox isChecked={isChecked} />
 
-export default Checkbox
+export default memo(Checkbox)

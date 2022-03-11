@@ -1,21 +1,11 @@
-import React from 'react';
-import List from './components/list.component';
+import React from 'react'
 
-const data: Object[] = [
-  { title: 'Title1', more: 'More' },
-  { title: 'Title2' },
-  { title: 'Title3' },
-]
-const renderer = (data: Object) => {
-  // TODO: deal with types
-  return <div>
-    <div>{(data as any).title}</div>
-    <div>{(data as any).more}</div>
-  </div>
-}
+import List from './components/list.component'
+import data from './assets/testDataset.json'
+import renderer from './renderer'
 
-const App: React.FC = () => (
+const App = () => (
   <List data={data} renderer={renderer} />
-);
+)
 
 export default App;

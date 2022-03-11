@@ -1,9 +1,9 @@
-import React, { ReactNode, useState } from 'react';
-import styled from 'styled-components';
-import _ from 'lodash';
+import React, { ReactNode, useState } from 'react'
+import styled from 'styled-components'
+import _ from 'lodash'
 
-import Checkbox from './checkbox.component';
-import { Colors } from '../constants';
+import Checkbox from './checkbox.component'
+import { Colors } from '../constants'
 
 const Container = styled.div`
   padding: 0 32px 32px 32px;
@@ -43,15 +43,15 @@ const toggleItem = (index: number, selected: number[]): number[] => {
   return [...selected, index]
 }
 
-const renderItems = (
-  data: Object[],
+const renderItems = <T extends unknown>(
+  data: T[],
   selected: number[],
-  renderer: (item: Object) => ReactNode,
+  renderer: (item: T) => ReactNode,
   setSelected: (items: number[]) => void,
 ) =>
   _.map(
     data,
-    (item: Object, index: number) => <div key={`item-${JSON.stringify(item)}`}>
+    (item: T, index: number) => <div key={btoa(JSON.stringify(item))}>
       <ItemLine onClick={() => setSelected(toggleItem(index, selected))}>
         <Checkbox isChecked={_.includes(selected, index)} />
         {renderer(item)}
@@ -59,19 +59,19 @@ const renderItems = (
     </div>
   )
 
-interface IListProps {
-  data: Object[]
-  renderer(item: Object): ReactNode
+interface IListProps<T> {
+  data: T[]
+  renderer(item: T): ReactNode
 }
 
-const List: React.FC<IListProps> = ({ data, renderer }: IListProps) => {
-  const [selected, setSelected] = useState([] as number[]) // TODO: useState can receive type as a parameter?
+const List = <T extends unknown>({ data, renderer }: IListProps<T>) => {
+  const [selected, setSelected] = useState<number[]>([])
   return (
     <Container>
       <TitleBox>Selected items: {_.isEmpty(selected) ? 'none' : selected.join(', ')}</TitleBox>
       <Table>
         <TitleLine>Info</TitleLine>
-        <>{renderItems(data, selected, renderer, setSelected)}</>
+        <>{renderItems<T>(data, selected, renderer, setSelected)}</>
       </Table>
     </Container>
   )
