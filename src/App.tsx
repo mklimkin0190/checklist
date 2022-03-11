@@ -4,8 +4,6 @@ import List from './components/list.component'
 import data from './assets/testDataset.json'
 import renderer from './renderer'
 
-const App = () => (
-  <List data={data} renderer={renderer} />
-)
+const App = () => <List data={data} renderer={renderer} />
 
-export default App;
+export default App
