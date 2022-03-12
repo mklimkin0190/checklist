@@ -79,7 +79,7 @@ const renderItems = <T extends unknown>(
   )
 
 interface IListProps<T> {
-  data: T[]
+  data?: T[]
   renderer(item: T): ReactNode
 }
 
@@ -93,9 +93,11 @@ const List = <T extends unknown>({ data, renderer }: IListProps<T>) => {
           <FirstColumn />
           Info
         </Header>
-        <Items>
-          {renderItems<T>(data, selected, renderer, setSelected)}
-        </Items>
+        {!_.isNil(data) && (
+          <Items>
+            {renderItems<T>(data, selected, renderer, setSelected)}
+          </Items>
+        )}
       </Table>
     </Container>
   )
