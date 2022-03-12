@@ -23,5 +23,6 @@ module.exports = {
   ],
   'rules': {
     '@typescript-eslint/no-unnecessary-type-constraint': ['off'],
+    semi: ['error', 'never'],
   }
 }

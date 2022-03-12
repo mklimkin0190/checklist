@@ -7,8 +7,8 @@ const StyledCheckbox = styled.div<{ isChecked: boolean }>`
   position: relative;
   width: 15px;
   height: 15px;
+  top: 1px;
   border-radius: 2px;
-  margin-right: 12px;
   border: 1px solid ${Colors.dark};
   ${({ isChecked }) => {
     if (isChecked) {

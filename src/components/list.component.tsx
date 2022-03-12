@@ -9,6 +9,10 @@ const Container = styled.div`
   padding: 0 32px 32px 32px;
   border-radius: 8px;
   color: ${Colors.text};
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  max-height: calc(100% - 20px);
 `
 
 const TitleBox = styled.div`
@@ -20,6 +24,13 @@ const TitleBox = styled.div`
 const Table = styled.div`
   border: 1px solid ${Colors.dark};
   border-radius: 6px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+`
+
+const Items = styled.div`
+  overflow: auto;
 `
 
 const ItemLine = styled.div`
@@ -31,9 +42,15 @@ const ItemLine = styled.div`
   }
 `
 
-const TitleLine = styled.div`
-  padding: 12px 0 12px 40px;
+const Header = styled.div`
+  display: flex;
+  padding: 12px;
   border-bottom: 1px solid ${Colors.dark};
+  height: 20px;
+`
+
+const FirstColumn = styled.div`
+  width: 26px;
 `
 
 const toggleItem = (index: number, selected: number[]): number[] => {
@@ -53,7 +70,9 @@ const renderItems = <T extends unknown>(
     data,
     (item: T, index: number) => <div key={btoa(JSON.stringify(item))}>
       <ItemLine onClick={() => setSelected(toggleItem(index, selected))}>
-        <Checkbox isChecked={_.includes(selected, index)} />
+        <FirstColumn>
+          <Checkbox isChecked={_.includes(selected, index)} />
+        </FirstColumn>
         {renderer(item)}
       </ItemLine>
     </div>
@@ -70,8 +89,13 @@ const List = <T extends unknown>({ data, renderer }: IListProps<T>) => {
     <Container>
       <TitleBox>Selected items: {_.isEmpty(selected) ? 'none' : selected.join(', ')}</TitleBox>
       <Table>
-        <TitleLine>Info</TitleLine>
-        <>{renderItems<T>(data, selected, renderer, setSelected)}</>
+        <Header>
+          <FirstColumn />
+          Info
+        </Header>
+        <Items>
+          {renderItems<T>(data, selected, renderer, setSelected)}
+        </Items>
       </Table>
     </Container>
   )

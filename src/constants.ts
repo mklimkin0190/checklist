@@ -3,4 +3,4 @@ export const Colors = {
   dark: 'rgba(63, 81, 181, 0.8)',
   light: 'rgba(63, 81, 181, 0.2)',
   white: 'white',
-};
+}
