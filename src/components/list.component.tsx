@@ -1,8 +1,8 @@
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import _ from 'lodash'
 
-import Checkbox from './checkbox.component'
+import ListItem, { FirstColumn } from './listItem.component'
 import { Colors } from '../constants'
 
 const Container = styled.div`
@@ -33,15 +33,6 @@ const Items = styled.div`
   overflow: auto;
 `
 
-const ItemLine = styled.div`
-  display: flex;
-  padding: 12px;
-  &:hover {
-    cursor: pointer;
-    background-color: ${Colors.light};
-  }
-`
-
 const Header = styled.div`
   display: flex;
   padding: 12px;
@@ -49,34 +40,29 @@ const Header = styled.div`
   height: 20px;
 `
 
-const FirstColumn = styled.div`
-  width: 26px;
-`
-
-const toggleItem = (index: number, selected: number[]): number[] => {
-  if (_.includes(selected, index)) {
-    return _.reject(selected, (selectedIndex: number) => selectedIndex === index)
-  }
-  return [...selected, index]
-}
-
 const renderItems = <T extends unknown>(
   data: T[],
-  selected: number[],
+  selected: boolean[],
   renderer: (item: T) => ReactNode,
-  setSelected: (items: number[]) => void,
-) =>
-  _.map(
+  onClick: (index: number) => void,
+) => {
+  return _.map(
     data,
-    (item: T, index: number) => <div key={btoa(JSON.stringify(item))}>
-      <ItemLine onClick={() => setSelected(toggleItem(index, selected))}>
-        <FirstColumn>
-          <Checkbox isChecked={_.includes(selected, index)} />
-        </FirstColumn>
-        {renderer(item)}
-      </ItemLine>
-    </div>
-  )
+    (item: T, index: number) => {
+      const isChecked = selected[index]
+      return (
+        <ListItem
+          key={btoa(JSON.stringify(item))}
+          item={item}
+          isChecked={isChecked}
+          renderer={renderer}
+          onClick={useCallback(() => onClick(index), [index])}
+        />
+      )
+  })
+}
+
+const pickSelectedIndices = (array: boolean[]) => _.keys(_.pickBy(array, (element: boolean) => element)).join(', ')
 
 interface IListProps<T> {
   data?: T[]
@@ -84,10 +70,18 @@ interface IListProps<T> {
 }
 
 const List = <T extends unknown>({ data, renderer }: IListProps<T>) => {
-  const [selected, setSelected] = useState<number[]>([])
+  const [selected, setSelected] = useState<boolean[]>([])
+
+  useEffect(() => {
+    if (_.isEmpty(data) || !_.isEmpty(selected)) {
+      return
+    }
+    setSelected(_.map(data, () => false))
+  }, [data])
+
   return (
     <Container>
-      <TitleBox>Selected items: {_.isEmpty(selected) ? 'none' : selected.join(', ')}</TitleBox>
+      <TitleBox>Selected items: {pickSelectedIndices(selected)}</TitleBox>
       <Table>
         <Header>
           <FirstColumn />
@@ -95,7 +89,12 @@ const List = <T extends unknown>({ data, renderer }: IListProps<T>) => {
         </Header>
         {!_.isNil(data) && (
           <Items>
-            {renderItems<T>(data, selected, renderer, setSelected)}
+            {renderItems<T>(data, selected, renderer, (index: number) => {
+              setSelected((prevSelected: boolean[]) => _.values<boolean>({
+                ...prevSelected,
+                [index]: !prevSelected[index]
+              }))
+            })}
           </Items>
         )}
       </Table>
