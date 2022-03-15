@@ -2,7 +2,6 @@ import { promises as fs } from 'fs'
 
 (() => {
   const DATA_LENGTH = +process.argv[2] || 100
-  console.log(DATA_LENGTH)
   const data = [...Array(DATA_LENGTH).keys()].map((i) => ({
     title: `Title ${i}`,
     description: `Description ${i}`,

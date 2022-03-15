@@ -16,7 +16,7 @@ const Container = styled.div`
 `
 
 const TitleBox = styled.div`
-  line-height: 50px;
+  padding: 15px 0;
   margin: 12px 0;
   font-weight: 600;
 `
