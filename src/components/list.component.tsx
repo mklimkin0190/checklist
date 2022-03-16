@@ -45,8 +45,8 @@ const renderItems = <T extends unknown>(
   selected: boolean[],
   renderer: (item: T) => ReactNode,
   onClick: (index: number) => void,
-) => {
-  return _.map(
+) =>
+  _.map(
     data,
     (item: T, index: number) => {
       const isChecked = selected[index]
@@ -60,9 +60,16 @@ const renderItems = <T extends unknown>(
         />
       )
   })
-}
 
 const pickSelectedIndices = (array: boolean[]) => _.keys(_.pickBy(array, (element: boolean) => element)).join(', ')
+
+const getSelectingFunction = (setSelected: (setStateFunction: (prevState: boolean[]) => boolean[]) => void) =>
+  (index: number) => {
+    setSelected((prevSelected: boolean[]) => _.values<boolean>({
+      ...prevSelected,
+      [index]: !prevSelected[index]
+    }))
+  }
 
 interface IListProps<T> {
   data?: T[]
@@ -79,24 +86,21 @@ const List = <T extends unknown>({ data, renderer }: IListProps<T>) => {
     setSelected(_.map(data, () => false))
   }, [data])
 
+  if (_.isNil(data) || _.isEmpty(data)) {
+    return null
+  }
+
   return (
     <Container>
-      <TitleBox>Selected items: {pickSelectedIndices(selected)}</TitleBox>
+      <TitleBox>Selected items: {pickSelectedIndices(selected) || 'none'}</TitleBox>
       <Table>
         <Header>
           <FirstColumn />
           Info
         </Header>
-        {!_.isNil(data) && (
-          <Items>
-            {renderItems<T>(data, selected, renderer, (index: number) => {
-              setSelected((prevSelected: boolean[]) => _.values<boolean>({
-                ...prevSelected,
-                [index]: !prevSelected[index]
-              }))
-            })}
-          </Items>
-        )}
+        <Items>
+          {renderItems<T>(data, selected, renderer, getSelectingFunction(setSelected))}
+        </Items>
       </Table>
     </Container>
   )
