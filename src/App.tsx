@@ -1,6 +1,6 @@
 import React from 'react'
 
-import List from './components/list.component'
+import List from './components/List/list.component'
 import data from './assets/testDataset.json'
 import renderer from './renderer'
 

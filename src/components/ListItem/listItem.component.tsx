@@ -1,21 +1,7 @@
 import React, { ReactNode, memo } from 'react'
-import styled from 'styled-components'
 
-import Checkbox from './checkbox.component'
-import { Colors } from '../constants'
-
-const ItemLine = styled.div`
-  display: flex;
-  padding: 12px;
-  &:hover {
-    cursor: pointer;
-    background-color: ${Colors.light};
-  }
-`
-
-export const FirstColumn = styled.div`
-  width: 26px;
-`
+import Checkbox from '../Checkbox/checkbox.component'
+import { ItemLine, FirstColumn } from './styled'
 
 interface IListItemProps<T> {
   item: T

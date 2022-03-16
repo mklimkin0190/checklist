@@ -1,44 +1,9 @@
 import React, { ReactNode, useState, useEffect, useCallback } from 'react'
-import styled from 'styled-components'
 import _ from 'lodash'
 
-import ListItem, { FirstColumn } from './listItem.component'
-import { Colors } from '../constants'
-
-const Container = styled.div`
-  padding: 0 32px 32px 32px;
-  border-radius: 8px;
-  color: ${Colors.text};
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-  max-height: calc(100% - 20px);
-`
-
-const TitleBox = styled.div`
-  padding: 15px 0;
-  margin: 12px 0;
-  font-weight: 600;
-`
-
-const Table = styled.div`
-  border: 1px solid ${Colors.dark};
-  border-radius: 6px;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-`
-
-const Items = styled.div`
-  overflow: auto;
-`
-
-const Header = styled.div`
-  display: flex;
-  padding: 12px;
-  border-bottom: 1px solid ${Colors.dark};
-  height: 20px;
-`
+import ListItem from '../ListItem/listItem.component'
+import { Container, TitleBox, Table, Items, Header } from './styled'
+import { FirstColumn } from '../ListItem/styled'
 
 const renderItems = <T extends unknown>(
   data: T[],
